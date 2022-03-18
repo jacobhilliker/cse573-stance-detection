@@ -3,6 +3,8 @@ Author: Jacob Hilliker
 Purpose: Builds data structure out of SemEval-2016 text file
 '''
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 '''
 Returns a list of dictionaries containing Tweet information.
 The keys of the dictionary are 'topic', 'tweet', and 'stance'.
@@ -39,16 +41,34 @@ def load_data():
         current_dict = {
             'topic': current_topic,
             'tweet': current_tweet,
-            'stance': current_stance
+            'stance': current_stance,
+            'vector': None
         }
 
         tweets.append(current_dict)
 
     return tweets
 
-if __name__ == '__main__':
-    data = load_data()
+'''
+Adds the TFIDF vector representation for each Tweet
+'''
+def vectorize():
 
-    print(data[0]['topic'])
-    print(data[0]['tweet'])
-    print(data[0]['stance'])
+    # Build list of just the tweets
+    data = load_data()
+    tweets = []
+    for datum in data:
+        tweets.append(datum['tweet'])
+
+    vectorizer = TfidfVectorizer()
+    tweet_vectors = vectorizer.fit_transform(tweets)
+
+    for i, datum in enumerate(data):
+        datum['vector'] = tweet_vectors[i]
+
+    return data
+
+if __name__ == '__main__':
+    
+    tweets = vectorize()
+    print(tweets[0]['vector'])
