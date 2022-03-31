@@ -4,18 +4,41 @@ Purpose: Builds data structure out of SemEval-2016 text file
 '''
 
 from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
+
+NUM_TWEETS = 2914
 
 '''
-Returns a list of dictionaries containing Tweet information.
-The keys of the dictionary are 'topic', 'tweet', and 'stance'.
+Returns a list of dictionaries, where each entry is of the form ['topic', 'tweet', 'stance', 'vector'].
 '''
-def load_data():
+def load_corrected_data():
+
+    tweets = []
+    data = pd.read_csv('data/semeval2016_corrected.txt')
+
+    for i in range(NUM_TWEETS):
+
+        current_dict = {
+            'topic': data['topic'][i],
+            'tweet': data['tweet'][i],
+            'stance': data['stance'][i],
+            'vector': None
+        }
+
+        tweets.append(current_dict)
+    
+    return tweets
+
+'''
+Returns a list of dictionaries containing Tweet information following the format above.
+'''
+def load_raw_data():
 
     tweets = []
     data = open('data/semeval2016_full.txt')
 
     # Strip column labels
-    labels = data.readline()
+    labels_unused = data.readline()
 
     # Break text into topic, Tweet, and stance
     for line in data.readlines():
@@ -52,10 +75,9 @@ def load_data():
 '''
 Adds the TFIDF vector representation for each Tweet
 '''
-def vectorize():
+def vectorize(data):
 
     # Build list of just the tweets
-    data = load_data()
     tweets = []
     for datum in data:
         tweets.append(datum['tweet'])
@@ -70,5 +92,6 @@ def vectorize():
 
 if __name__ == '__main__':
     
-    tweets = vectorize()
+    tweets = vectorize(load_corrected_data())
+    print(tweets[0]['tweet'])
     print(tweets[0]['vector'])
