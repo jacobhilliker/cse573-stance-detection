@@ -3,7 +3,9 @@ Author: Jacob Hilliker
 Purpose: Builds data structure out of SemEval-2016 text file
 '''
 
+from sklearn.feature_extraction import text
 from sklearn.feature_extraction.text import TfidfVectorizer
+
 import pandas as pd
 
 '''
@@ -118,7 +120,7 @@ def vectorize(data):
     for datum in data:
         tweets.append(datum['tweet'])
 
-    vectorizer = TfidfVectorizer()
+    vectorizer = TfidfVectorizer(stop_words=text.ENGLISH_STOP_WORDS)
     tweet_vectors = vectorizer.fit_transform(tweets)
 
     for i, datum in enumerate(data):
