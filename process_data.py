@@ -6,7 +6,43 @@ Purpose: Builds data structure out of SemEval-2016 text file
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 
-NUM_TWEETS = 2914
+'''
+Parameters:
+  data - list of dictionaries
+  attribute - one of 'topic', 'tweet', 'stance', 'vector'
+Returns a list of the desired attribute
+'''
+def get_attribute(data, attribute):
+    result = []
+    for i in range(len(data)):
+        result.append(data[i][attribute])
+
+    return result
+
+'''
+Returns list of topics
+'''
+def get_topics(data):
+    return get_attribute(data, 'topic')
+
+'''
+Returns list of Tweets
+'''
+def get_tweets(data):
+    return get_attribute(data, 'tweet')
+
+'''
+Returns list of stance labels
+'''
+def get_stances(data):
+    return get_attribute(data, 'stance')
+
+'''
+Returns list of vectorized Tweets
+'''
+def get_vectors(data):
+    return get_attribute(data, 'vector')
+
 
 '''
 Returns a list of dictionaries, where each entry is of the form ['topic', 'tweet', 'stance', 'vector'].
@@ -16,7 +52,7 @@ def load_corrected_data():
     tweets = []
     data = pd.read_csv('data/semeval2016_corrected.txt')
 
-    for i in range(NUM_TWEETS):
+    for i in range(len(data)):
 
         current_dict = {
             'topic': data['topic'][i],
