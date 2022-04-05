@@ -121,7 +121,7 @@ def vectorize(data):
         tweets.append(datum['tweet'])
 
     vectorizer = TfidfVectorizer(stop_words=text.ENGLISH_STOP_WORDS)
-    tweet_vectors = vectorizer.fit_transform(tweets)
+    tweet_vectors = vectorizer.fit_transform(tweets).toarray()
 
     for i, datum in enumerate(data):
         datum['vector'] = tweet_vectors[i]
