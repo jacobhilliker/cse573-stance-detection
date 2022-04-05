@@ -12,4 +12,5 @@ This repository is for the Stance Detection task for ASU CSE573: Semantic Web Mi
 
 ## References
 SemEval-2016 Dataset: [link](https://alt.qcri.org/semeval2016/task6/index.php?id=data-and-tools)
+
 Corrected SemEval-2016 Dataset: [link](https://github.com/DamiFur/Twitter-semeval2016/blob/master/semeval_train.csv)
