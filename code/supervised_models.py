@@ -4,7 +4,7 @@ Purpose: Train and evaluate four different supervised classification models
 '''
 
 from sklearn import svm, neighbors, naive_bayes
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import fasttext
 from process_data import *
 
@@ -70,7 +70,13 @@ def train_fastText(x_test, y_test):
         
     
     f1 = f1_score(y_test, y_pred, average= 'micro')
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, average = 'micro')
+    recall = recall_score(y_test, y_pred, average = 'micro')
     print('fastText', f1)
+    print('accuarcy', accuracy)
+    print('precision', precision)
+    print('recall', recall)
 
 
 '''
@@ -82,7 +88,13 @@ def train_knn(x_train, x_test, y_train, y_test):
     knn.fit(x_train, y_train)
     y_pred = knn.predict(x_test)
     f1 = f1_score(y_test, y_pred, average= 'micro')
-    print('KNN', f1)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, average = 'micro')
+    recall = recall_score(y_test, y_pred, average = 'micro')
+    print('knn', f1)
+    print('accuarcy', accuracy)
+    print('precision', precision)
+    print('recall', recall)
 
 
 '''
@@ -93,7 +105,13 @@ def train_naive_bayes(x_train, x_test, y_train, y_test):
     nb.fit(x_train, y_train)
     y_pred = nb.predict(x_test)
     f1 = f1_score(y_test, y_pred, average= 'micro')
-    print('Naive Bayes', f1)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, average = 'micro')
+    recall = recall_score(y_test, y_pred, average = 'micro')
+    print('naive bayes', f1)
+    print('accuarcy', accuracy)
+    print('precision', precision)
+    print('recall', recall)
 
 '''
 train the linear svc model, and evaluate it
@@ -103,7 +121,13 @@ def train_svm(x_train, x_test, y_train, y_test):
     svc.fit(x_train, y_train)
     y_pred = svc.predict(x_test)
     f1 = f1_score(y_test, y_pred, average= 'micro')
-    print('SVM', f1)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred, average = 'micro')
+    recall = recall_score(y_test, y_pred, average = 'micro')
+    print('svm', f1)
+    print('accuarcy', accuracy)
+    print('precision', precision)
+    print('recall', recall)
 
 
 if __name__ == '__main__':
