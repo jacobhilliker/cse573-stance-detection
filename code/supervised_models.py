@@ -73,10 +73,11 @@ def train_fastText(x_test, y_test):
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average = 'micro')
     recall = recall_score(y_test, y_pred, average = 'micro')
-    print('fastText', f1)
-    print('accuarcy', accuracy)
-    print('precision', precision)
-    print('recall', recall)
+    print('fastText')
+    print('accuarcy: ', accuracy)
+    print('precision: ', precision)
+    print('recall: ', recall)
+    print('f1: ', f1)
 
 
 '''
@@ -91,10 +92,11 @@ def train_knn(x_train, x_test, y_train, y_test):
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average = 'micro')
     recall = recall_score(y_test, y_pred, average = 'micro')
-    print('knn', f1)
-    print('accuarcy', accuracy)
-    print('precision', precision)
-    print('recall', recall)
+    print('KNN')
+    print('accuarcy: ', accuracy)
+    print('precision: ', precision)
+    print('recall: ', recall)
+    print('f1: ', f1)
 
 
 '''
@@ -108,10 +110,11 @@ def train_naive_bayes(x_train, x_test, y_train, y_test):
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average = 'micro')
     recall = recall_score(y_test, y_pred, average = 'micro')
-    print('naive bayes', f1)
-    print('accuarcy', accuracy)
-    print('precision', precision)
-    print('recall', recall)
+    print('Naive Bayes')
+    print('accuarcy: ', accuracy)
+    print('precision: ', precision)
+    print('recall: ', recall)
+    print('f1: ', f1)
 
 '''
 train the linear svc model, and evaluate it
@@ -124,10 +127,11 @@ def train_svm(x_train, x_test, y_train, y_test):
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average = 'micro')
     recall = recall_score(y_test, y_pred, average = 'micro')
-    print('svm', f1)
-    print('accuarcy', accuracy)
-    print('precision', precision)
-    print('recall', recall)
+    print('SVM')
+    print('accuarcy: ', accuracy)
+    print('precision: ', precision)
+    print('recall: ', recall)
+    print('f1: ', f1)
 
 
 if __name__ == '__main__':
