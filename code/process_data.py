@@ -5,6 +5,7 @@ Purpose: Builds data structure out of SemEval-2016 text file
 
 from sklearn.feature_extraction import text
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
 
 import pandas as pd
 
@@ -47,12 +48,29 @@ def get_vectors(data):
 
 
 '''
+Split dataset into persisting training and testing datasets
+'''
+def split_data():
+
+    data = pd.read_csv('data/semeval2016_corrected.txt')
+
+    data = data.sample(frac = 1).reset_index(drop=True) # randomize data
+
+    # use first 0.75 for training data, and last 0.25 for test
+    split_point = int(data.shape[0] * 3/4)   
+
+    data[:split_point].to_csv('data/semeval2016_corrected_train.csv', index=False)
+    data[split_point:].to_csv('data/semeval2016_corrected_test.csv', index=False)
+
+    return
+
+'''
 Returns a list of dictionaries, where each entry is of the form ['topic', 'tweet', 'stance', 'vector'].
 '''
-def load_corrected_data():
+def load_corrected_data(filePath):
 
     tweets = []
-    data = pd.read_csv('data/semeval2016_corrected.txt')
+    data = pd.read_csv(filePath)
 
     for i in range(len(data)):
 
@@ -130,6 +148,6 @@ def vectorize(data):
 
 if __name__ == '__main__':
     
-    tweets = vectorize(load_corrected_data())
+    tweets = vectorize(load_corrected_data('data/semeval2016_corrected.txt'))
     print(tweets[0]['tweet'])
     print(tweets[0]['vector'])
