@@ -1,12 +1,11 @@
 '''
-Author: Jacob Hilliker
+Author: Jacob Hilliker and Jack Myers
 Purpose: Builds data structure out of SemEval-2016 text file
 '''
 
 from sklearn.feature_extraction import text
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-
 import pandas as pd
 
 '''
