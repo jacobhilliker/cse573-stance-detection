@@ -84,8 +84,8 @@ def train_fastText(x_test, y_test):
 train the knn model, and then evaluate it
 '''
 def train_knn(x_train, x_test, y_train, y_test):
-    k = 15
-    knn = neighbors.KNeighborsClassifier(k, weights="uniform") # uniform or distance
+    k = 13
+    knn = neighbors.KNeighborsClassifier(k, weights="distance") 
     knn.fit(x_train, y_train)
     y_pred = knn.predict(x_test)
     f1 = f1_score(y_test, y_pred, average= 'weighted')
@@ -103,7 +103,7 @@ def train_knn(x_train, x_test, y_train, y_test):
 train the Gaussian naive bayes model, and evaluate it
 '''
 def train_naive_bayes(x_train, x_test, y_train, y_test):
-    nb = naive_bayes.GaussianNB()
+    nb = naive_bayes.ComplementNB(alpha=2)
     nb.fit(x_train, y_train)
     y_pred = nb.predict(x_test)
     f1 = f1_score(y_test, y_pred, average= 'weighted')
@@ -120,7 +120,7 @@ def train_naive_bayes(x_train, x_test, y_train, y_test):
 train the linear svc model, and evaluate it
 '''
 def train_svm(x_train, x_test, y_train, y_test):
-    svc = svm.LinearSVC()
+    svc = svm.LinearSVC(C=1.5, penalty='l1', loss='squared_hinge', dual=False)
     svc.fit(x_train, y_train)
     y_pred = svc.predict(x_test)
     f1 = f1_score(y_test, y_pred, average= 'weighted')
