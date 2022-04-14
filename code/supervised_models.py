@@ -60,7 +60,8 @@ def train_fastText(x_test, y_test):
     try:
         model = fasttext.load_model('models/fasttext_trained_model.bin')
     except:
-        model = fasttext.train_supervised('data/fasttext_train.txt', lr=0.001, dim=500, epoch=5000)
+        model = fasttext.train_supervised('data/fasttext_train.txt', lr=0.006, dim=20, epoch=500)
+        #model = fasttext.train_supervised('data/fasttext_train.txt', autotuneValidationFile='data/val.txt', autotuneDuration=600)
         model.save_model('models/fasttext_trained_model.bin')
     
     # get all predicted labels and compare with test labels
