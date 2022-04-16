@@ -133,9 +133,7 @@ Adds the TFIDF vector representation for each Tweet
 def vectorize(data):
 
     # Build list of just the tweets
-    tweets = []
-    for datum in data:
-        tweets.append(datum['tweet'])
+    tweets = [datum['tweet'] for datum in data]
 
     vectorizer = TfidfVectorizer(stop_words=text.ENGLISH_STOP_WORDS)
     tweet_vectors = vectorizer.fit_transform(tweets).toarray()
