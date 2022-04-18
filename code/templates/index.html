@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Stance Detection</title>
+    </head>
+    <body>
+
+        <h1>Stance Detection</h1>
+        <br>
+        <div>
+            <label>Split Data: </label>
+            <input type="submit" value="Split Data" onclick="splitData()">
+        </div>
+
+        <script>
+            function splitData() 
+            {
+                var xhr = new XMLHttpRequest();
+
+                // listen for response to request
+                xhr.addEventListener("readystatechange", function() {
+                    if(this.readyState === 4) {
+                        console.log('Data Split Successfully')
+                    }
+                })
+                xhr.open("GET", "/splitData");
+                xhr.send();
+            }
+
+        </script>
+
+    </body>
+</html>
