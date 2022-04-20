@@ -94,7 +94,6 @@ def load_raw_data():
 
     # Break text into topic, Tweet, and stance
     for line in data.readlines():
-
         current_topic = ""
         current_tweet = ""
         current_stance = ""
