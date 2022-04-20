@@ -8,60 +8,46 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
-"""
-Parameters:
-  data - list of dictionaries
-  attribute - one of 'topic', 'tweet', 'stance', 'vector'
-Returns a list of the desired attribute
-"""
-
 
 def get_attribute(data, attribute):
+    """
+    Parameters:
+      data - list of dictionaries
+      attribute - one of 'topic', 'tweet', 'stance', 'vector'
+    Returns a list of the desired attribute"""
+
     return [datum[attribute] for datum in data]
 
 
-"""
-Returns list of topics
-"""
-
-
 def get_topics(data):
+    """
+    Returns list of topics"""
     return get_attribute(data, "topic")
 
 
-"""
-Returns list of Tweets
-"""
-
-
 def get_tweets(data):
+    """
+    Returns list of Tweets"""
     return get_attribute(data, "tweet")
 
 
-"""
-Returns list of stance labels
-"""
-
-
 def get_stances(data):
+    """
+    Returns list of stance labels"""
     return get_attribute(data, "stance")
 
 
-"""
-Returns list of vectorized Tweets
-"""
-
-
 def get_vectors(data):
+    """
+    Returns list of vectorized Tweets
+    """
     return get_attribute(data, "vector")
 
 
-"""
-Split dataset into persisting training and testing datasets
-"""
-
-
 def split_data():
+    """
+    Split dataset into persisting training and testing datasets
+    """
 
     data = pd.read_csv("data/semeval2016_corrected.txt")
 
@@ -76,12 +62,10 @@ def split_data():
     return
 
 
-"""
-Returns a list of dictionaries, where each entry is of the form ['topic', 'tweet', 'stance', 'vector'].
-"""
-
-
 def load_corrected_data(filePath):
+    """
+    Returns a list of dictionaries, where each entry is of the form ['topic', 'tweet', 'stance', 'vector'].
+    """
     data = pd.read_csv(filePath)
 
     tweets = [
@@ -97,18 +81,16 @@ def load_corrected_data(filePath):
     return tweets
 
 
-"""
-Returns a list of dictionaries containing Tweet information following the format above.
-"""
-
-
 def load_raw_data():
+    """
+    Returns a list of dictionaries containing Tweet information following the format above.
+    """
 
     tweets = []
     data = open("data/semeval2016_full.txt")
 
     # Strip column labels
-    labels_unused = data.readline()
+    _ = data.readline()
 
     # Break text into topic, Tweet, and stance
     for line in data.readlines():
@@ -143,12 +125,10 @@ def load_raw_data():
     return tweets
 
 
-"""
-Adds the TFIDF vector representation for each Tweet
-"""
-
-
 def vectorize(data):
+    """
+    Adds the TFIDF vector representation for each Tweet
+    """
 
     # Build list of just the tweets
     tweets = [datum["tweet"] for datum in data]
