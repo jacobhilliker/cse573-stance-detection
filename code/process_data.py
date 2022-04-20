@@ -69,11 +69,8 @@ def load_corrected_data(filePath):
 
     tweets = []
     data = pd.read_csv(filePath)
-    print(data)
 
     for i in range(len(data)):
-        print(data['topic'][i]);
-
         current_dict = {
             'topic': data['topic'][i],
             'tweet': data['tweet'][i],
