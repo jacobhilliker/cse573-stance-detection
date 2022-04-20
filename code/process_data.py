@@ -66,17 +66,22 @@ def load_corrected_data(filePath):
     """
     Returns a list of dictionaries, where each entry is of the form ['topic', 'tweet', 'stance', 'vector'].
     """
-    data = pd.read_csv(filePath)
 
-    tweets = [
-        {
-            "topic": datum["topic"],
-            "tweet": datum["tweet"],
-            "stance": datum["stance"],
-            "vector": None,
+    tweets = []
+    data = pd.read_csv(filePath)
+    print(data)
+
+    for i in range(len(data)):
+        print(data['topic'][i]);
+
+        current_dict = {
+            'topic': data['topic'][i],
+            'tweet': data['tweet'][i],
+            'stance': data['stance'][i],
+            'vector': None
         }
-        for datum in data
-    ]
+
+        tweets.append(current_dict)
 
     return tweets
 
