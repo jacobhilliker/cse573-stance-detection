@@ -143,7 +143,6 @@ def vectorize(data):
 
 
 if __name__ == "__main__":
-
     tweets = vectorize(load_corrected_data("data/semeval2016_corrected.txt"))
     print(tweets[0]["tweet"])
     print(tweets[0]["vector"])
