@@ -7,6 +7,7 @@ from sklearn import svm, neighbors, naive_bayes
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import fasttext
 from process_data import *
+import json
 
 
 '''
@@ -39,13 +40,17 @@ def train_models():
 
 
     # train the fastText model, it only takes the X_test and y_test as input
-    train_fastText(get_tweets(test_data), get_stances(test_data))
+    fastText = train_fastText(get_tweets(test_data), get_stances(test_data))
 
 
     # Train the three sklearn models. Each takes X_train, X_test, y_train, y_test as input
-    train_knn(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data))
-    train_naive_bayes(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data))
-    train_svm(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data)) 
+    knn = train_knn(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data))
+    naive_bayes = train_naive_bayes(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data))
+    svm = train_svm(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data)) 
+
+    results = json.dumps([fastText, knn, naive_bayes, svm])
+
+    return results
 
 
 
@@ -74,11 +79,12 @@ def train_fastText(x_test, y_test):
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average = 'weighted')
     recall = recall_score(y_test, y_pred, average = 'weighted')
-    print('\nfastText')
-    print('accuarcy: ', accuracy)
-    print('precision: ', precision)
-    print('recall: ', recall)
-    print('f1: ', f1)
+    return json.dumps({
+        'model': 'fastText',
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1})
 
 
 '''
@@ -93,11 +99,12 @@ def train_knn(x_train, x_test, y_train, y_test):
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average = 'weighted')
     recall = recall_score(y_test, y_pred, average = 'weighted')
-    print('\nKNN')
-    print('accuarcy: ', accuracy)
-    print('precision: ', precision)
-    print('recall: ', recall)
-    print('f1: ', f1)
+    return json.dumps({
+        'model': 'knn',
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1})
 
 
 '''
@@ -111,11 +118,12 @@ def train_naive_bayes(x_train, x_test, y_train, y_test):
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average = 'weighted')
     recall = recall_score(y_test, y_pred, average = 'weighted')
-    print('\nNaive Bayes')
-    print('accuarcy: ', accuracy)
-    print('precision: ', precision)
-    print('recall: ', recall)
-    print('f1: ', f1)
+    return json.dumps({
+        'model': 'naive_bayes',
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1})
 
 '''
 train the linear svc model, and evaluate it
@@ -128,12 +136,12 @@ def train_svm(x_train, x_test, y_train, y_test):
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average = 'weighted')
     recall = recall_score(y_test, y_pred, average = 'weighted')
-    print('\nSVM')
-    print('accuarcy: ', accuracy)
-    print('precision: ', precision)
-    print('recall: ', recall)
-    print('f1: ', f1)
-    print('\n')
+    return json.dumps({
+        'model': 'svm',
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1})
 
 
 if __name__ == '__main__':

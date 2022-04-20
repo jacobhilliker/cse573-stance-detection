@@ -20,5 +20,12 @@ def splitData():
     except:
         return "Split Failed"
 
+@app.route('/supervised', methods=['GET'])
+def supervised():
+    try:
+        return supervised_models.train_models()
+    except:
+        return "Error - Unable to train models"
+
 if __name__ == '__main__':
 	app.run()
