@@ -4,6 +4,7 @@ Purpose: Train and evaluate four different supervised classification models
 """
 
 from enum import Enum
+from regex import W
 from sklearn import svm, neighbors, naive_bayes
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import fasttext
