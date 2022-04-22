@@ -9,21 +9,21 @@ class Topic(str, Enum):
     HRC = "Hillary Clinton"
 
 
-def load_abortion_tweets():
-    return load_topic_data(Topic.ABORTION)
-def load_atheism_tweets():
-    return load_topic_data(Topic.ATHEISM)
-def load_climate_tweets():
-    return load_topic_data(Topic.CLIMATE)
-def load_feminism_tweets():
-    return load_topic_data(Topic.FEMINISM)
-def load_hrc_tweets():
-    return load_topic_data(Topic.HRC)
+def get_abortion_indices() -> list[int]:
+    return get_topic_indices(Topic.ABORTION)
+def get_atheism_indices() -> list[int]:
+    return get_topic_indices(Topic.ATHEISM)
+def get_climate_indices() -> list[int]:
+    return get_topic_indices(Topic.CLIMATE)
+def get_feminism_indices() -> list[int]:
+    return get_topic_indices(Topic.FEMINISM)
+def get_hrc_indices() -> list[int]:
+    return get_topic_indices(Topic.HRC)
 
-def load_topic_data(topic: Topic):
-    return list(filter(lambda dict: dict['topic'] == topic, load_data()))
+def get_topic_indices(topic: Topic) -> list[int]:
+    data = load_data()
+    return [i for i in range(len(data)) if data[i]['topic'] == topic]
 
-def load_data():
+def load_data() -> list:
     return load_corrected_data('data/semeval2016_corrected.txt')
     
-print(load_hrc_tweets());
