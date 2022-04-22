@@ -9,7 +9,7 @@ import fasttext
 from process_data import *
 
 
-def train_models():
+def train_models(data):
     """
     Load train and testing data, and then train all four models
     """
@@ -17,15 +17,14 @@ def train_models():
     # split_data()
 
     # load train and test datasets
-    train_data = load_corrected_data("data/semeval2016_corrected_train.csv")
-    test_data = load_corrected_data("data/semeval2016_corrected_test.csv")
+    len_train_data = len(load_corrected_data("data/semeval2016_corrected_train.csv"))
 
     # combine the sets to vectorize them, and then split them again after vectors computed
-    vectorized_data = vectorize(train_data + test_data)
+    vectorized_data = vectorize(data)
 
     # split vectorized data back to train and test datasets
-    train_data = vectorized_data[: len(train_data)]
-    test_data = vectorized_data[len(train_data) :]
+    train_data = vectorized_data[: len_train_data]
+    test_data = vectorized_data[len_train_data :]
 
     # format training data into required file for fastText model
     with open("data/fasttext_train.txt", "w") as file:
@@ -35,7 +34,6 @@ def train_models():
             except:
                 # ignore invalid input rows for training
                 pass
-    file.close()
 
     # train the fastText model, it only takes the X_test and y_test as input
     train_fastText(get_tweets(test_data), get_stances(test_data))
@@ -137,11 +135,17 @@ def train_svm(x_train, x_test, y_train, y_test):
     print_metrics(accuracy, precision, recall, f1)
     print("\n")
 
+
 def print_metrics(accuracy, precision, recall, f1):
-    print(f'Accuracy: {accuracy}')
-    print(f'Precision: {precision}')
-    print(f'Recall: {recall}')
-    print(f'F1: {f1}')
+    print(f"Accuracy: {accuracy}")
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"F1: {f1}")
+
 
 if __name__ == "__main__":
-    train_models()
+    # load train and test datasets
+    train_data = load_corrected_data("data/semeval2016_corrected_train.csv")
+    test_data = load_corrected_data("data/semeval2016_corrected_test.csv")
+
+    train_models(train_data + test_data)
