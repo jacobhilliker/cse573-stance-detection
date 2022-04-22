@@ -31,7 +31,7 @@ def train_models():
     with open("data/fasttext_train.txt", "w") as file:
         for tweet in train_data:
             try:
-                file.write("{} __label__{}\n".format(tweet["tweet"], tweet["stance"]))
+                file.write(f"{tweet['tweet']} __label__{tweet['stance']}\n")
             except:
                 # ignore invalid input rows for training
                 pass
@@ -88,10 +88,7 @@ def train_fastText(x_test, y_test):
     precision = precision_score(y_test, y_pred, average="weighted")
     recall = recall_score(y_test, y_pred, average="weighted")
     print("\nfastText")
-    print("accuracy: ", accuracy)
-    print("precision: ", precision)
-    print("recall: ", recall)
-    print("f1: ", f1)
+    print_metrics(accuracy, precision, recall, f1)
 
 
 def train_knn(x_train, x_test, y_train, y_test):
@@ -107,10 +104,7 @@ def train_knn(x_train, x_test, y_train, y_test):
     precision = precision_score(y_test, y_pred, average="weighted")
     recall = recall_score(y_test, y_pred, average="weighted")
     print("\nKNN")
-    print("accuracy: ", accuracy)
-    print("precision: ", precision)
-    print("recall: ", recall)
-    print("f1: ", f1)
+    print_metrics(accuracy, precision, recall, f1)
 
 
 def train_naive_bayes(x_train, x_test, y_train, y_test):
@@ -125,10 +119,7 @@ def train_naive_bayes(x_train, x_test, y_train, y_test):
     precision = precision_score(y_test, y_pred, average="weighted")
     recall = recall_score(y_test, y_pred, average="weighted")
     print("\nNaive Bayes")
-    print("accuracy: ", accuracy)
-    print("precision: ", precision)
-    print("recall: ", recall)
-    print("f1: ", f1)
+    print_metrics(accuracy, precision, recall, f1)
 
 
 def train_svm(x_train, x_test, y_train, y_test):
@@ -143,12 +134,14 @@ def train_svm(x_train, x_test, y_train, y_test):
     precision = precision_score(y_test, y_pred, average="weighted")
     recall = recall_score(y_test, y_pred, average="weighted")
     print("\nSVM")
-    print("accuracy: ", accuracy)
-    print("precision: ", precision)
-    print("recall: ", recall)
-    print("f1: ", f1)
+    print_metrics(accuracy, precision, recall, f1)
     print("\n")
 
+def print_metrics(accuracy, precision, recall, f1):
+    print(f'Accuracy: {accuracy}')
+    print(f'Precision: {precision}')
+    print(f'Recall: {recall}')
+    print(f'F1: {f1}')
 
 if __name__ == "__main__":
     train_models()
