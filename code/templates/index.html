@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Stance Detection</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+        <style>
+            body {
+                background-color: maroon;
+            }
+            
+            h1, p, label, table {
+                font-family: 'Roboto', sans-serif;
+            }
+            h1 {
+                text-align: center;
+            }
+
+            th, td {
+                padding: 4px;
+            }
+
+            h1 {
+                color: #eee;
+            }
+
+            tr {
+                background-color: #bbb;
+            }
+
+            .odd {
+                background-color: #ddd;
+            }
+
+            #content {
+                background-color: gold;
+                border-radius: 4px;
+                margin: 24px;
+                padding: 16px;
+            }
+
+            #supervisedTable {
+                display: none;
+                margin-top: 16px;
+            }
+        </style>
+
+    </head>
+    <body>
+
+        <h1>Stance Detection</h1>
+        <br>
+        <div id="content">
+            <label>Split Data: </label>
+            <input type="submit" value="Split Data" onclick="splitData()">
+            <p id="splitResponse"></p>
+            <br>
+
+            <label>Evaluate Supervised Models</label>
+            <input type="submit" value="Evaluate Supervised Models" onclick="evalSupervised()">
+
+            <table id="supervisedTable">
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1 Score</th>
+                </tr>
+                <tr id="fastText" class="odd"></tr>
+                <tr id="knn"></tr>
+                <tr id="naive_bayes" class="odd"></tr>
+                <tr id="svm"></tr>
+            </table>
+        </div>
+
+        <script type="text/javascript">
+            
+            function splitData() 
+            {
+                var xhr = new XMLHttpRequest();
+
+                // listen for response to request
+                xhr.addEventListener("readystatechange", function() {
+                    if(this.readyState === 4) {
+                        console.log(xhr.response)
+                    }
+                })
+                xhr.open("GET", "/splitData");
+                xhr.send();
+            }
+
+            function evalSupervised()
+            {
+                var xhr = new XMLHttpRequest();
+
+                // listen for response to request
+                xhr.addEventListener("readystatechange", function() {
+                    if(this.readyState === 4) {
+
+                        var results = JSON.parse(xhr.response);
+
+                        for (var i = 0; i < results.length; i++) {
+                            buildRow(results[i]);
+                        }
+
+                        // show finished table
+                        document.getElementById('supervisedTable').style.display = "block";
+                    }
+                })
+                xhr.open("GET", "/supervised");
+                xhr.send();
+            }
+
+            // Builds a table row with model name, accuracy, precision, recall, and F1 score.
+            function buildRow(model)
+            {
+
+                const modelJSON = JSON.parse(model)
+                document.getElementById(modelJSON.model).innerHTML =
+                    "<td>" + modelJSON.model + "</td>" + 
+                    "<td>" + modelJSON.accuracy.toFixed(5) + "</td>" +
+                    "<td>" + modelJSON.precision.toFixed(5) + "</td>" +
+                    "<td>" + modelJSON.recall.toFixed(5) + "</td>" +
+                    "<td>" + modelJSON.f1.toFixed(5) + "</td>";
+
+            }
+
+        </script>
+
+    </body>
+</html>
