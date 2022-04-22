@@ -3,13 +3,17 @@ Author: Jack Myers and Henry Zhao
 Purpose: Train and evaluate four different supervised classification models
 """
 
+from enum import Enum
 from sklearn import svm, neighbors, naive_bayes
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import fasttext
 from process_data import *
 
+class Learning(Enum):
+    SUPERVISED = 1,
+    SEMISUPERVISED = 2
 
-def train_models(data):
+def train_models(data, learning: Learning):
     """
     Load train and testing data, and then train all four models
     """
@@ -36,7 +40,7 @@ def train_models(data):
                 pass
 
     # train the fastText model, it only takes the X_test and y_test as input
-    train_fastText(get_tweets(test_data), get_stances(test_data))
+    train_fastText(get_tweets(test_data), get_stances(test_data), learning)
 
     # Train the three sklearn models. Each takes X_train, X_test, y_train, y_test as input
     train_knn(
@@ -59,7 +63,8 @@ def train_models(data):
     )
 
 
-def train_fastText(x_test, y_test):
+
+def train_fastText(x_test, y_test, learning: Learning):
     """
     train the fastText model, and then evaluate it using the testing data
     """
@@ -68,13 +73,13 @@ def train_fastText(x_test, y_test):
     # Try to load a previous model, if it fails then train a new one and save it.
     # If you wish to retrain the model, then delete the bin file before executing this method
     try:
-        model = fasttext.load_model("models/fasttext_trained_model.bin")
+        model = fasttext.load_model(f"models/fasttext_trained_model{learning}.bin")
     except:
         model = fasttext.train_supervised(
             "data/fasttext_train.txt", lr=0.006, dim=20, epoch=500
         )
         # model = fasttext.train_supervised('data/fasttext_train.txt', autotuneValidationFile='data/val.txt', autotuneDuration=600)
-        model.save_model("models/fasttext_trained_model.bin")
+        model.save_model(f"models/fasttext_trained_model{learning}.bin")
 
     # get all predicted labels and compare with test labels
     for x in x_test:
@@ -148,4 +153,5 @@ if __name__ == "__main__":
     train_data = load_corrected_data("data/semeval2016_corrected_train.csv")
     test_data = load_corrected_data("data/semeval2016_corrected_test.csv")
 
+    print("Supervised: ")
     train_models(train_data + test_data)
