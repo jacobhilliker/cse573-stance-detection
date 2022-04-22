@@ -1,12 +1,12 @@
 import re
 from enum import Enum
 from process_topic_data import Stance
-from swear_words import swear_list
+from swear_words import swear_words
 from process_topic_data import Topic
 
 class Favor:
     ABORTION = ["rights", "my body", "will", "choice", "force", "woman/women", "rape"]
-    ATHEISM = ["Evidence", "reason", "rational", "logic", "science", "equal", "free", "bigot", "scam"] + swear_list
+    ATHEISM = ["Evidence", "reason", "rational", "logic", "science", "equal", "free", "bigot", "scam"] + swear_words
     CLIMATE = ["#climate", "our", "warm", "stop", "plan"]
     FEMINISM = ["Harass"]
     HRC = ["Woman", "women", "rights"]
@@ -22,15 +22,15 @@ class Against:
 def get_stance(tweet, cur_topic):
     ret = []
     if cur_topic == Topic.ATHEISM:
-        ret = count_occurances(tweet, Favor.ABORTION, Against.ABORTION)
+        ret = count_occurrences(tweet, Favor.ABORTION, Against.ABORTION)
     elif cur_topic == Topic.HRC:
-        ret = count_occurances(tweet, Favor.HRC, Against.HRC)
+        ret = count_occurrences(tweet, Favor.HRC, Against.HRC)
     elif cur_topic == Topic.CLIMATE:
-        ret = count_occurances(tweet, Favor.CLIMATE, Against.CLIMATE)
+        ret = count_occurrences(tweet, Favor.CLIMATE, Against.CLIMATE)
     elif cur_topic == Topic.FEMINISM:
-        ret = count_occurances(tweet, Favor.FEMINISM, Against.FEMINISM)
+        ret = count_occurrences(tweet, Favor.FEMINISM, Against.FEMINISM)
     else:
-        ret = count_occurances(tweet, Favor.ATHEISM, Against.ATHEISM)
+        ret = count_occurrences(tweet, Favor.ATHEISM, Against.ATHEISM)
 
     if ret[0] > ret[1]:
         return Stance.FAVOR
@@ -39,7 +39,7 @@ def get_stance(tweet, cur_topic):
     else:
         return Stance.NONE
 
-def count_occurances(tweet, favor_list, against_list):
+def count_occurrences(tweet, favor_list, against_list):
     for_count = 0
     against_count = 0
     for f_term in favor_list:
