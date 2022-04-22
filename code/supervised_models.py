@@ -10,6 +10,7 @@ from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_sc
 import fasttext
 from process_data import *
 import json
+import os
 
 def train_with_data():
     train_data = load_corrected_data("data/semeval2016_corrected_train.csv")
@@ -38,6 +39,7 @@ def train_models(data, learning: Learning):
     test_data = vectorized_data[len_train_data :]
 
     # format training data into required file for fastText model
+
     with open("data/fasttext_train.txt", "w") as file:
         for tweet in train_data:
             try:

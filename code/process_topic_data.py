@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List
 from process_data import load_corrected_data
+import os
 
 
 class Topic(str, Enum):
@@ -9,7 +10,6 @@ class Topic(str, Enum):
     CLIMATE = "Climate Change"
     FEMINISM = "Feminist Movement"
     HRC = "Hillary Clinton"
-
 
 class Stance(str, Enum):
     AGAINST = "AGAINST"
@@ -104,4 +104,4 @@ def load_data(dataset: Dataset) -> List:
     elif dataset == Dataset.TRAIN:
         return load_corrected_data("data/semeval2016_corrected_train.csv")
     else:
-        assert 1 == 2
+         assert 1 == 2
