@@ -4,6 +4,7 @@ Purpose: Train and evaluate four different supervised classification models
 """
 
 from enum import Enum
+from regex import W
 from sklearn import svm, neighbors, naive_bayes
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import fasttext
@@ -146,7 +147,7 @@ def print_metrics(accuracy, precision, recall, f1):
     print(f"Precision: {precision}")
     print(f"Recall: {recall}")
     print(f"F1: {f1}")
-
+:W
 
 if __name__ == "__main__":
     # load train and test datasets
@@ -154,4 +155,4 @@ if __name__ == "__main__":
     test_data = load_corrected_data("data/semeval2016_corrected_test.csv")
 
     print("Supervised: ")
-    train_models(train_data + test_data)
+    train_models(train_data + test_data, Learning.SUPERVISED)
