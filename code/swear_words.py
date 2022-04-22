@@ -211,7 +211,6 @@ rot13_encoded_swear_words = [
     "tnlybeq",
     "tnlfrk",
     "tbngfr",
-    "Tbq",
     "tbq-qnz",
     "tbq-qnzarq",
     "tbqqnza",
@@ -450,3 +449,5 @@ swear_words = [
     codecs.decode(rot13_encoded_swear_word, "rot_13")
     for rot13_encoded_swear_word in rot13_encoded_swear_words
 ]
+
+print(swear_words)
