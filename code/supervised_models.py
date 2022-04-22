@@ -9,6 +9,7 @@ from sklearn import svm, neighbors, naive_bayes
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import fasttext
 from process_data import *
+import os
 
 class Learning(Enum):
     SUPERVISED = 1,
@@ -32,6 +33,7 @@ def train_models(data, learning: Learning):
     test_data = vectorized_data[len_train_data :]
 
     # format training data into required file for fastText model
+
     with open("data/fasttext_train.txt", "w") as file:
         for tweet in train_data:
             try:
@@ -147,7 +149,6 @@ def print_metrics(accuracy, precision, recall, f1):
     print(f"Precision: {precision}")
     print(f"Recall: {recall}")
     print(f"F1: {f1}")
-:W
 
 if __name__ == "__main__":
     # load train and test datasets
