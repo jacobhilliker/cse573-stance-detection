@@ -23,7 +23,7 @@ def splitData():
 @app.route('/supervised', methods=['GET'])
 def supervised():
     try:
-        return supervised_models.train_models()
+        return supervised_models.train_with_data()
     except:
         return "Error - Unable to train models"
 

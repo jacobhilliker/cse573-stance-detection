@@ -9,6 +9,11 @@ import fasttext
 from process_data import *
 import json
 
+def train_with_data():
+    train_data = load_corrected_data("data/semeval2016_corrected_train.csv")
+    test_data = load_corrected_data("data/semeval2016_corrected_test.csv")
+
+    return train_models(train_data + test_data)
 
 def train_models(data):
     """
@@ -40,26 +45,6 @@ def train_models(data):
     fastText = train_fastText(get_tweets(test_data), get_stances(test_data))
 
     # Train the three sklearn models. Each takes X_train, X_test, y_train, y_test as input
-<<<<<<< HEAD
-    train_knn(
-        get_vectors(train_data),
-        get_vectors(test_data),
-        get_stances(train_data),
-        get_stances(test_data),
-    )
-    train_naive_bayes(
-        get_vectors(train_data),
-        get_vectors(test_data),
-        get_stances(train_data),
-        get_stances(test_data),
-    )
-    train_svm(
-        get_vectors(train_data),
-        get_vectors(test_data),
-        get_stances(train_data),
-        get_stances(test_data),
-    )
-=======
     knn = train_knn(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data))
     naive_bayes = train_naive_bayes(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data))
     svm = train_svm(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data)) 
@@ -67,7 +52,6 @@ def train_models(data):
     results = json.dumps([fastText, knn, naive_bayes, svm])
 
     return results
->>>>>>> FlaskAppBranch
 
 
 def train_fastText(x_test, y_test):
@@ -94,14 +78,6 @@ def train_fastText(x_test, y_test):
 
     f1 = f1_score(y_test, y_pred, average="weighted")
     accuracy = accuracy_score(y_test, y_pred)
-<<<<<<< HEAD
-    precision = precision_score(y_test, y_pred, average="weighted")
-    recall = recall_score(y_test, y_pred, average="weighted")
-    print("\nfastText")
-    print_metrics(accuracy, precision, recall, f1)
-
-
-=======
     precision = precision_score(y_test, y_pred, average = 'weighted')
     recall = recall_score(y_test, y_pred, average = 'weighted')
     return json.dumps({
@@ -115,7 +91,6 @@ def train_fastText(x_test, y_test):
 '''
 train the knn model, and then evaluate it
 '''
->>>>>>> FlaskAppBranch
 def train_knn(x_train, x_test, y_train, y_test):
     """
     train the knn model, and then evaluate it
@@ -126,14 +101,6 @@ def train_knn(x_train, x_test, y_train, y_test):
     y_pred = knn.predict(x_test)
     f1 = f1_score(y_test, y_pred, average="weighted")
     accuracy = accuracy_score(y_test, y_pred)
-<<<<<<< HEAD
-    precision = precision_score(y_test, y_pred, average="weighted")
-    recall = recall_score(y_test, y_pred, average="weighted")
-    print("\nKNN")
-    print_metrics(accuracy, precision, recall, f1)
-
-
-=======
     precision = precision_score(y_test, y_pred, average = 'weighted')
     recall = recall_score(y_test, y_pred, average = 'weighted')
     return json.dumps({
@@ -147,7 +114,6 @@ def train_knn(x_train, x_test, y_train, y_test):
 '''
 train the Gaussian naive bayes model, and evaluate it
 '''
->>>>>>> FlaskAppBranch
 def train_naive_bayes(x_train, x_test, y_train, y_test):
     """
     train the Gaussian naive bayes model, and evaluate it
@@ -157,14 +123,6 @@ def train_naive_bayes(x_train, x_test, y_train, y_test):
     y_pred = nb.predict(x_test)
     f1 = f1_score(y_test, y_pred, average="weighted")
     accuracy = accuracy_score(y_test, y_pred)
-<<<<<<< HEAD
-    precision = precision_score(y_test, y_pred, average="weighted")
-    recall = recall_score(y_test, y_pred, average="weighted")
-    print("\nNaive Bayes")
-    print_metrics(accuracy, precision, recall, f1)
-
-
-=======
     precision = precision_score(y_test, y_pred, average = 'weighted')
     recall = recall_score(y_test, y_pred, average = 'weighted')
     return json.dumps({
@@ -177,7 +135,6 @@ def train_naive_bayes(x_train, x_test, y_train, y_test):
 '''
 train the linear svc model, and evaluate it
 '''
->>>>>>> FlaskAppBranch
 def train_svm(x_train, x_test, y_train, y_test):
     """
     train the linear svc model, and evaluate it
@@ -187,28 +144,6 @@ def train_svm(x_train, x_test, y_train, y_test):
     y_pred = svc.predict(x_test)
     f1 = f1_score(y_test, y_pred, average="weighted")
     accuracy = accuracy_score(y_test, y_pred)
-<<<<<<< HEAD
-    precision = precision_score(y_test, y_pred, average="weighted")
-    recall = recall_score(y_test, y_pred, average="weighted")
-    print("\nSVM")
-    print_metrics(accuracy, precision, recall, f1)
-    print("\n")
-
-
-def print_metrics(accuracy, precision, recall, f1):
-    print(f"Accuracy: {accuracy}")
-    print(f"Precision: {precision}")
-    print(f"Recall: {recall}")
-    print(f"F1: {f1}")
-
-
-if __name__ == "__main__":
-    # load train and test datasets
-    train_data = load_corrected_data("data/semeval2016_corrected_train.csv")
-    test_data = load_corrected_data("data/semeval2016_corrected_test.csv")
-
-    train_models(train_data + test_data)
-=======
     precision = precision_score(y_test, y_pred, average = 'weighted')
     recall = recall_score(y_test, y_pred, average = 'weighted')
     return json.dumps({
@@ -220,5 +155,4 @@ if __name__ == "__main__":
 
 
 if __name__ == '__main__':
-    train_models()
->>>>>>> FlaskAppBranch
+    train_with_data()
