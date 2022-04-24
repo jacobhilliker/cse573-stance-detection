@@ -129,9 +129,7 @@ def unsupervised_cluster():
     df = df.replace({'Sentiment': 'neg'},'AGAINST')
     df = df.replace({'Sentiment': 'pos'},'FAVOR')
     df = df.replace({'Sentiment': 'other'},'NONE')
-    
-
-    return np.sum(df.Stance == df.Sentiment)/len(df), np.sum(df.Target == df.cluster_name)/len(df), np.sum(np.logical_and(df.Target == df.cluster_name, df.Stance == df.Sentiment))/len(df)
+    # return np.sum(df.Stance == df.Sentiment)/len(df), np.sum(df.Target == df.cluster_name)/len(df), np.sum(np.logical_and(df.Target == df.cluster_name, df.Stance == df.Sentiment))/len(df)
 
     sentiment_f1 = f1_score(df.Stance, df.Sentiment, average="weighted")
     sentiment_accuracy = accuracy_score(df.Stance, df.Sentiment)
