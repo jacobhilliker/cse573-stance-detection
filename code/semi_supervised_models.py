@@ -15,18 +15,6 @@ from process_topic_data import (
 from process_topic_data import load_data
 from stance_topic_data import get_stance
 
-def get_regex_filter(cur_topic):
-    if cur_topic==Topic.ATHEISM:
-        return "Atheism"
-    elif cur_topic==Topic.HRC:
-        return "Hrc"
-    elif cur_topic==Topic.CLIMATE:
-        return "Climate"
-    elif cur_topic==Topic.ABORTION:
-        return "Abortion"
-    else:
-        return "Feminism"
-
 
 def semisup():
     train_data = load_data(Dataset.TRAIN)
@@ -56,7 +44,8 @@ def semisup():
                 #4) Now we use the labels to mark the train data and run the training model
                 #5) Repeat above steps for test data and calculate the accuracy.
 
-            stance_label = get_stance(tweet, topic)
+            predicted_stance = get_stance(tweet, topic)
+            stance_label = predicted_stance.value
 
             datum["stance"] = stance_label
 

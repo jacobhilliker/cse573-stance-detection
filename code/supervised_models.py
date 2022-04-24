@@ -75,6 +75,7 @@ def train_models(data, learning: Learning):
     )
 
     results = json.dumps([fastText, knn, naive_bayes, svm])
+    # print(json.loads(results))
 
     return results
 

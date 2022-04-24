@@ -19,7 +19,7 @@ class Against:
     HRC = ["Benghazi", "left", "lib", "email", "e-mail", "comm", "MSM", "found", "bill"]
 
 
-def get_stance(tweet, cur_topic):
+def get_stance(tweet, cur_topic: Topic) -> Topic:
     ret = []
     if cur_topic == Topic.ATHEISM:
         ret = count_occurrences(tweet, Favor.ABORTION, Against.ABORTION)
