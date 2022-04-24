@@ -2,6 +2,7 @@
 import string
 from collections import Counter
 import matplotlib.pyplot as plt
+from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 
 from transformers import BertTokenizer
 import re
@@ -67,7 +68,7 @@ def sentiment_analyze(cleaned_text1):
 
     return sentiment_analyze(cleaned_text)
 
-def main_call():
+def unsupervised_cluster():
 
     all_files = [Dataset.TRAIN, Dataset.TEST]
     li = []
@@ -125,9 +126,51 @@ def main_call():
     length = len(text_tweets)
 
     df.sentiment = df.Tweet.apply(sentiment_analysis_sent)
-    df = df.replace({'Stance': 'AGAINST'}, 'neg')
-    df = df.replace({'Stance': 'FAVOR'}, 'pos')
-    df = df.replace({'Stance': 'NONE'}, 'other')
+    df = df.replace({'Sentiment': 'neg'},'AGAINST')
+    df = df.replace({'Sentiment': 'pos'},'FAVOR')
+    df = df.replace({'Sentiment': 'other'},'NONE')
+    
 
     return np.sum(df.Stance == df.Sentiment)/len(df), np.sum(df.Target == df.cluster_name)/len(df), np.sum(np.logical_and(df.Target == df.cluster_name, df.Stance == df.Sentiment))/len(df)
 
+    sentiment_f1 = f1_score(df.Stance, df.Sentiment, average="weighted")
+    sentiment_accuracy = accuracy_score(df.Stance, df.Sentiment)
+    sentiment_precision = precision_score(df.Stance, df.Sentiment, average="weighted")
+    sentiment_recall = recall_score(df.Stance, df.Sentiment, average="weighted")
+    
+    topic_f1 = f1_score(df.Target, df.cluster_name, average="weighted")
+    topic_accuracy = accuracy_score(df.Target, df.cluster_name)
+    topic_precision = precision_score(df.Target, df.cluster_name, average="weighted")
+    topic_recall = recall_score(df.Target, df.cluster_name, average="weighted")
+
+    both_f1 = f1_score(df.Stance + df.Target, df.Sentiment + df.cluster_name, average="weighted")
+    both_accuracy = accuracy_score(df.Stance + df.Target, df.Sentiment + df.cluster_name, average="weighted")
+    both_precision = precision_score(df.Stance + df.Target, df.Sentiment + df.cluster_name, average="weighted")
+    both_recall = recall_score(df.Stance + df.Target, df.Sentiment + df.cluster_name, average="weighted")
+
+    return json.dumps(
+        [
+            {
+                "model": "sentiment",
+                "accuracy": sentiment_accuracy,
+                "precision": sentiment_precision,
+                "recall": sentiment_recall,
+                "f1": sentiment_f1,
+            },
+            {
+                "model": "topic modelling",
+                "accuracy": topic_accuracy,
+                "precision": topic_precision,
+                "recall": topic_recall,
+                "f1": topic_f1,
+            },
+            {
+                "model": "sentiment+topic modelling",
+                "accuracy": both_accuracy,
+                "precision": both_precision,
+                "recall": both_recall,
+                "f1": both_f1,
+            }
+        ]
+        
+    )
