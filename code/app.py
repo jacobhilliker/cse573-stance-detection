@@ -1,6 +1,8 @@
+from pickle import GET
 from flask import Flask, render_template
 import process_data
 import supervised_models
+import semi_supervised_models
 
 app = Flask(__name__)
 
@@ -24,6 +26,13 @@ def splitData():
 def supervised():
     try:
         return supervised_models.train_with_data()
+    except:
+        return "Error - Unable to train models"
+
+@app.route('/semisup', methods=['GET'])
+def semisup():
+    try:
+        return semi_supervised_models.semisup()
     except:
         return "Error - Unable to train models"
 
