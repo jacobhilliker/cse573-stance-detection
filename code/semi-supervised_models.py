@@ -61,7 +61,7 @@ def semisup():
             datum["stance"] = stance_label
 
     print("SemiSupervised: ")
-    train_models(train_data + load_data(Dataset.TEST), Learning.SEMISUPERVISED)
+    return train_models(train_data + load_data(Dataset.TEST), Learning.SEMISUPERVISED)
 
 if __name__ == "__main__":
     semisup()
