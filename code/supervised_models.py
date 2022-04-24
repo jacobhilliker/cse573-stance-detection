@@ -9,7 +9,6 @@ from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_sc
 import fasttext
 from process_data import *
 import json
-import os
 
 
 def train_with_data():

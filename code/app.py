@@ -14,14 +14,6 @@ def hello_world():
 def index():
     return render_template('index.html')
 
-@app.route('/splitData', methods=['GET'])
-def splitData():
-    try:
-        process_data.split_data()
-        return "Split Successful"
-    except:
-        return "Split Failed"
-
 @app.route('/supervised', methods=['GET'])
 def supervised():
     try:
@@ -29,12 +21,19 @@ def supervised():
     except:
         return "Error - Unable to train models"
 
-@app.route('/semisup', methods=['GET'])
+@app.route('/semiSupervised', methods=['GET'])
 def semisup():
     try:
         return semi_supervised_models.semisup()
     except:
         return "Error - Unable to train models"
+
+@app.route('/unsupervised', methods=['GET'])
+def unsupervised():
+    try:
+        print('Waiting')
+    except:
+        return "Error in training unsupervised models"
 
 if __name__ == '__main__':
 	app.run()

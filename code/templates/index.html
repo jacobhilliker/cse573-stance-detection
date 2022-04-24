@@ -28,8 +28,16 @@
                 color: #eee;
             }
 
+            label {
+                margin-bottom: 16px;
+            }
+
             tr {
                 background-color: #bbb;
+            }
+
+            .evalModel {
+                margin-bottom: 16px;
             }
 
             .odd {
@@ -43,9 +51,9 @@
                 padding: 16px;
             }
 
-            #supervisedTable {
+            #supervisedTable, #unsupervisedTable, #semiSupervisedTable {
                 display: none;
-                margin-top: 16px;
+                margin-bottom: 16px;
             }
         </style>
 
@@ -55,13 +63,11 @@
         <h1>Stance Detection</h1>
         <br>
         <div id="content">
-            <label>Split Data: </label>
-            <input type="submit" value="Split Data" onclick="splitData()">
-            <p id="splitResponse"></p>
-            <br>
 
-            <label>Evaluate Supervised Models</label>
-            <input type="submit" value="Evaluate Supervised Models" onclick="evalSupervised()">
+            <div class="evalModel">
+                <label>Supervised Learning</label>
+                <input type="submit" value="Evaluate" onclick="evalModels('supervised')">
+            </div>
 
             <table id="supervisedTable">
                 <tr>
@@ -71,10 +77,52 @@
                     <th>Recall</th>
                     <th>F1 Score</th>
                 </tr>
-                <tr id="fastText" class="odd"></tr>
-                <tr id="knn"></tr>
-                <tr id="naive_bayes" class="odd"></tr>
-                <tr id="svm"></tr>
+                <tr id="fastText-supervised" class="odd"></tr>
+                <tr id="knn-supervised"></tr>
+                <tr id="naive_bayes-supervised" class="odd"></tr>
+                <tr id="svm-supervised"></tr>
+            </table>
+
+            <br>
+
+            <div class="evalModel">
+                <label>Semi-Supervised Learning</label>
+                <input type="submit" value="Evaluate" onclick="evalModels('semiSupervised')">
+            </div>
+
+            <table id="semiSupervisedTable">
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1 Score</th>
+                </tr>
+                <tr id="fastText-semiSupervised" class="odd"></tr>
+                <tr id="knn-semiSupervised"></tr>
+                <tr id="naive_bayes-semiSupervised" class="odd"></tr>
+                <tr id="svm-semiSupervised"></tr>
+            </table>
+
+            <br>
+
+            <div class="evalModel">
+                <label>Unsupervised Learning</label>
+                <input type="submit" value="Evaluate" onclick="evalModels('unsupervised')">
+            </div>
+
+            <table id="unsupervisedTable">
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1 Score</th>
+                </tr>
+                <tr id="fastText-unsupervised" class="odd"></tr>
+                <tr id="knn-unsupervised"></tr>
+                <tr id="naive_bayes-unsupervised" class="odd"></tr>
+                <tr id="svm-unsupervised"></tr>
             </table>
         </div>
 
@@ -94,7 +142,7 @@
                 xhr.send();
             }
 
-            function evalSupervised()
+            function evalModels(learningType)
             {
                 var xhr = new XMLHttpRequest();
 
@@ -105,23 +153,23 @@
                         var results = JSON.parse(xhr.response);
 
                         for (var i = 0; i < results.length; i++) {
-                            buildRow(results[i]);
+                            buildRow(results[i], learningType);
                         }
 
                         // show finished table
-                        document.getElementById('supervisedTable').style.display = "block";
+                        document.getElementById(learningType + 'Table').style.display = "block";
                     }
                 })
-                xhr.open("GET", "/supervised");
+                xhr.open("GET", "/" + learningType);
                 xhr.send();
             }
 
             // Builds a table row with model name, accuracy, precision, recall, and F1 score.
-            function buildRow(model)
+            function buildRow(model, learningType)
             {
 
                 const modelJSON = JSON.parse(model)
-                document.getElementById(modelJSON.model).innerHTML =
+                document.getElementById(modelJSON.model + "-" + learningType).innerHTML =
                     "<td>" + modelJSON.model + "</td>" + 
                     "<td>" + modelJSON.accuracy.toFixed(5) + "</td>" +
                     "<td>" + modelJSON.precision.toFixed(5) + "</td>" +
