@@ -4,7 +4,6 @@ Purpose: Train and evaluate four different supervised classification models
 """
 
 from enum import Enum
-from regex import W
 from sklearn import svm, neighbors, naive_bayes
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 import fasttext
@@ -12,14 +11,18 @@ from process_data import *
 import json
 import os
 
+
 def train_with_data():
     train_data = load_corrected_data("data/semeval2016_corrected_train.csv")
     test_data = load_corrected_data("data/semeval2016_corrected_test.csv")
 
-    return train_models(train_data + test_data)
+    return train_models(train_data + test_data, Learning.SUPERVISED)
+
+
 class Learning(Enum):
-    SUPERVISED = 1,
+    SUPERVISED = (1,)
     SEMISUPERVISED = 2
+
 
 def train_models(data, learning: Learning):
     """
@@ -35,8 +38,8 @@ def train_models(data, learning: Learning):
     vectorized_data = vectorize(data)
 
     # split vectorized data back to train and test datasets
-    train_data = vectorized_data[: len_train_data]
-    test_data = vectorized_data[len_train_data :]
+    train_data = vectorized_data[:len_train_data]
+    test_data = vectorized_data[len_train_data:]
 
     # format training data into required file for fastText model
 
@@ -49,17 +52,31 @@ def train_models(data, learning: Learning):
                 pass
 
     # train the fastText model, it only takes the X_test and y_test as input
-    fastText = train_fastText(get_tweets(test_data), get_stances(test_data))
+    fastText = train_fastText(get_tweets(test_data), get_stances(test_data), learning)
 
     # Train the three sklearn models. Each takes X_train, X_test, y_train, y_test as input
-    knn = train_knn(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data))
-    naive_bayes = train_naive_bayes(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data))
-    svm = train_svm(get_vectors(train_data), get_vectors(test_data), get_stances(train_data), get_stances(test_data)) 
+    knn = train_knn(
+        get_vectors(train_data),
+        get_vectors(test_data),
+        get_stances(train_data),
+        get_stances(test_data),
+    )
+    naive_bayes = train_naive_bayes(
+        get_vectors(train_data),
+        get_vectors(test_data),
+        get_stances(train_data),
+        get_stances(test_data),
+    )
+    svm = train_svm(
+        get_vectors(train_data),
+        get_vectors(test_data),
+        get_stances(train_data),
+        get_stances(test_data),
+    )
 
     results = json.dumps([fastText, knn, naive_bayes, svm])
 
     return results
-
 
 
 def train_fastText(x_test, y_test, learning: Learning):
@@ -86,19 +103,24 @@ def train_fastText(x_test, y_test, learning: Learning):
 
     f1 = f1_score(y_test, y_pred, average="weighted")
     accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred, average = 'weighted')
-    recall = recall_score(y_test, y_pred, average = 'weighted')
-    return json.dumps({
-        'model': 'fastText',
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1})
+    precision = precision_score(y_test, y_pred, average="weighted")
+    recall = recall_score(y_test, y_pred, average="weighted")
+    return json.dumps(
+        {
+            "model": "fastText",
+            "accuracy": accuracy,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+        }
+    )
 
 
-'''
+"""
 train the knn model, and then evaluate it
-'''
+"""
+
+
 def train_knn(x_train, x_test, y_train, y_test):
     """
     train the knn model, and then evaluate it
@@ -109,19 +131,24 @@ def train_knn(x_train, x_test, y_train, y_test):
     y_pred = knn.predict(x_test)
     f1 = f1_score(y_test, y_pred, average="weighted")
     accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred, average = 'weighted')
-    recall = recall_score(y_test, y_pred, average = 'weighted')
-    return json.dumps({
-        'model': 'knn',
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1})
+    precision = precision_score(y_test, y_pred, average="weighted")
+    recall = recall_score(y_test, y_pred, average="weighted")
+    return json.dumps(
+        {
+            "model": "knn",
+            "accuracy": accuracy,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+        }
+    )
 
 
-'''
+"""
 train the Gaussian naive bayes model, and evaluate it
-'''
+"""
+
+
 def train_naive_bayes(x_train, x_test, y_train, y_test):
     """
     train the Gaussian naive bayes model, and evaluate it
@@ -131,18 +158,24 @@ def train_naive_bayes(x_train, x_test, y_train, y_test):
     y_pred = nb.predict(x_test)
     f1 = f1_score(y_test, y_pred, average="weighted")
     accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred, average = 'weighted')
-    recall = recall_score(y_test, y_pred, average = 'weighted')
-    return json.dumps({
-        'model': 'naive_bayes',
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1})
+    precision = precision_score(y_test, y_pred, average="weighted")
+    recall = recall_score(y_test, y_pred, average="weighted")
+    return json.dumps(
+        {
+            "model": "naive_bayes",
+            "accuracy": accuracy,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+        }
+    )
 
-'''
+
+"""
 train the linear svc model, and evaluate it
-'''
+"""
+
+
 def train_svm(x_train, x_test, y_train, y_test):
     """
     train the linear svc model, and evaluate it
@@ -152,15 +185,18 @@ def train_svm(x_train, x_test, y_train, y_test):
     y_pred = svc.predict(x_test)
     f1 = f1_score(y_test, y_pred, average="weighted")
     accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred, average = 'weighted')
-    recall = recall_score(y_test, y_pred, average = 'weighted')
-    return json.dumps({
-        'model': 'svm',
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f1': f1})
+    precision = precision_score(y_test, y_pred, average="weighted")
+    recall = recall_score(y_test, y_pred, average="weighted")
+    return json.dumps(
+        {
+            "model": "svm",
+            "accuracy": accuracy,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+        }
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     train_with_data()
