@@ -3,6 +3,7 @@ from flask import Flask, render_template
 import process_data
 import supervised_models
 import semi_supervised_models
+import unsupervised
 
 app = Flask(__name__)
 
@@ -29,9 +30,10 @@ def semisup():
         return "Error - Unable to train models"
 
 @app.route('/unsupervised', methods=['GET'])
-def unsupervised():
+def unsupervisedAPI():
     try:
-        return unsupervised.unsupervised_cluster()
+        # return unsupervised.unsupervised_cluster()
+        return unsupervised.demo()
     except:
         return "Error in training unsupervised models"
 

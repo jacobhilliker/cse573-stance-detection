@@ -6,6 +6,7 @@ from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_sc
 
 from transformers import BertTokenizer
 import re
+import json
 import pandas as pd
 import numpy as np
 import nltk 
@@ -143,31 +144,51 @@ def unsupervised_cluster():
 
     return json.dumps(
         [
-            {
+            json.dumps({
                 "model": "sentiment",
                 "accuracy": sentiment_accuracy,
                 "precision": sentiment_precision,
                 "recall": sentiment_recall,
                 "f1": sentiment_f1,
-            },
-            {
+            }),
+            json.dumps({
                 "model": "topic_modeling",
                 "accuracy": topic_accuracy,
                 "precision": topic_precision,
                 "recall": topic_recall,
                 "f1": topic_f1,
-            },
-            {
+            }),
+            json.dumps({
                 "model": "sentiment_and_topic_modeling",
                 "accuracy": both_accuracy,
                 "precision": both_precision,
                 "recall": both_recall,
                 "f1": both_f1,
-            }
+            })
         ]
         
     )
-    # return json.dumps("""[{"model": "sentiment", "accuracy": 0.44371997254632806, "precision": 0.45223196282651573, "recall": 0.44371997254632806, "f1": 0.41406603802107156}, {"model": "topic_modeling", "accuracy": 0.20212765957446807, "precision": 0.22022955216809206, "recall": 0.20212765957446807, "f1": 0.20466423147977636}, {"model": "sentiment_and_topic_modeling", "accuracy": 0.10638297872340426, "precision": 0.13865858135268772, "recall": 0.10638297872340426, "f1": 0.11095636130466122}]""")
+def demo():
+    return json.dumps([
+            json.dumps({
+                "model": "sentiment", 
+                "accuracy": 0.44371997254632806, 
+                "precision": 0.45223196282651573, 
+                "recall": 0.44371997254632806,
+                 "f1": 0.41406603802107156}),
+            json.dumps({
+                "model": "topic_modeling", 
+                "accuracy": 0.20212765957446807, 
+                "precision": 0.22022955216809206, 
+                "recall": 0.20212765957446807, 
+                "f1": 0.20466423147977636}), 
+            json.dumps({
+                "model": "sentiment_and_topic_modeling", 
+                "accuracy": 0.10638297872340426,
+                "precision": 0.13865858135268772, 
+                "recall": 0.10638297872340426, 
+                "f1": 0.11095636130466122})
+            ])
 
 if __name__ == "__main__":
     nltk.download('punkt')
