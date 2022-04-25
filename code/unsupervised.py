@@ -11,9 +11,6 @@ import numpy as np
 import nltk 
 from nltk.cluster import KMeansClusterer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as sia
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('vader_lexicon')
 
 
 def tokenize_truncate(sentence, tokenizer, max_input_length):  
@@ -52,25 +49,24 @@ def sentiment_analysis_sent(text):
           if word in final_words:
               emotions.append(emotion)
 
-    count = Counter(emotions)
 
 def sentiment_analyze(cleaned_text1):
     score = sia().polarity_scores(cleaned_text1)
     if score['neg'] > score['pos']:
-        # print("Negative Sentiment")
+        # print("Negative sentiment")
         return "neg"
     if score['neg'] < score['pos']:
-        # print("Positive Sentiment")
+        # print("Positive sentiment")
         return "pos"
     else:
-        # print("Neutral Sentiment")
+        # print("Neutral sentiment")
         return "other"
 
     return sentiment_analyze(cleaned_text)
 
 def unsupervised_cluster():
 
-    all_files = [Dataset.TRAIN, Dataset.TEST]
+    all_files = ['data/semeval2016_corrected_train.csv', 'data/semeval2016_corrected_test.csv']
     li = []
     
     for filename in all_files:
@@ -85,11 +81,10 @@ def unsupervised_cluster():
     # max_input_length = tokenizer.max_model_input_sizes['bert-base-uncased']
     max_input_length=64
 
-    df["input_ids"] = [tokenizer.convert_tokens_to_ids(tokenize_truncate(sent, tokenizer, max_input_length)) for sent in df.Tweet.values]
-    df_topics = df.Target.unique()
+    df["input_ids"] = [tokenizer.convert_tokens_to_ids(tokenize_truncate(sent, tokenizer, max_input_length)) for sent in df.tweet.values]
+    df_topics = df.topic.unique()
     topic_ids = [tokenizer.convert_tokens_to_ids(tokenize_truncate(sent, tokenizer, max_input_length)) for sent in df_topics]
     NUM_CLUSTERS = len(topic_ids)
-    sentences = df.Tweet
     X = np.array(df['input_ids'].tolist())
 
     from sklearn.cluster import KMeans
@@ -122,29 +117,29 @@ def unsupervised_cluster():
 
     e_name = 'emotion.txt'
 
-    text_tweets = df.Tweet.to_list()
+    text_tweets = df.tweet.to_list()
     length = len(text_tweets)
 
-    df.sentiment = df.Tweet.apply(sentiment_analysis_sent)
-    df = df.replace({'Sentiment': 'neg'},'AGAINST')
-    df = df.replace({'Sentiment': 'pos'},'FAVOR')
-    df = df.replace({'Sentiment': 'other'},'NONE')
-    # return np.sum(df.Stance == df.Sentiment)/len(df), np.sum(df.Target == df.cluster_name)/len(df), np.sum(np.logical_and(df.Target == df.cluster_name, df.Stance == df.Sentiment))/len(df)
+    df.sentiment = df.tweet.apply(sentiment_analysis_sent)
+    df = df.replace({'sentiment': 'neg'},'AGAINST')
+    df = df.replace({'sentiment': 'pos'},'FAVOR')
+    df = df.replace({'sentiment': 'other'},'NONE')
+    # return np.sum(df.stance == df.sentiment)/len(df), np.sum(df.topic == df.cluster_name)/len(df), np.sum(np.logical_and(df.topic == df.cluster_name, df.stance == df.sentiment))/len(df)
 
-    sentiment_f1 = f1_score(df.Stance, df.Sentiment, average="weighted")
-    sentiment_accuracy = accuracy_score(df.Stance, df.Sentiment)
-    sentiment_precision = precision_score(df.Stance, df.Sentiment, average="weighted")
-    sentiment_recall = recall_score(df.Stance, df.Sentiment, average="weighted")
+    sentiment_f1 = f1_score(df.stance, df.sentiment, average="weighted")
+    sentiment_accuracy = accuracy_score(df.stance, df.sentiment)
+    sentiment_precision = precision_score(df.stance, df.sentiment, average="weighted")
+    sentiment_recall = recall_score(df.stance, df.sentiment, average="weighted")
     
-    topic_f1 = f1_score(df.Target, df.cluster_name, average="weighted")
-    topic_accuracy = accuracy_score(df.Target, df.cluster_name)
-    topic_precision = precision_score(df.Target, df.cluster_name, average="weighted")
-    topic_recall = recall_score(df.Target, df.cluster_name, average="weighted")
+    topic_f1 = f1_score(df.topic, df.cluster_name, average="weighted")
+    topic_accuracy = accuracy_score(df.topic, df.cluster_name)
+    topic_precision = precision_score(df.topic, df.cluster_name, average="weighted")
+    topic_recall = recall_score(df.topic, df.cluster_name, average="weighted")
 
-    both_f1 = f1_score(df.Stance + df.Target, df.Sentiment + df.cluster_name, average="weighted")
-    both_accuracy = accuracy_score(df.Stance + df.Target, df.Sentiment + df.cluster_name, average="weighted")
-    both_precision = precision_score(df.Stance + df.Target, df.Sentiment + df.cluster_name, average="weighted")
-    both_recall = recall_score(df.Stance + df.Target, df.Sentiment + df.cluster_name, average="weighted")
+    both_f1 = f1_score(df.stance + df.topic, df.sentiment + df.cluster_name, average="weighted")
+    both_accuracy = accuracy_score(df.stance + df.topic, df.sentiment + df.cluster_name, average="weighted")
+    both_precision = precision_score(df.stance + df.topic, df.sentiment + df.cluster_name, average="weighted")
+    both_recall = recall_score(df.stance + df.topic, df.sentiment + df.cluster_name, average="weighted")
 
     return json.dumps(
         [
@@ -156,14 +151,14 @@ def unsupervised_cluster():
                 "f1": sentiment_f1,
             },
             {
-                "model": "topic modelling",
+                "model": "topic_modeling",
                 "accuracy": topic_accuracy,
                 "precision": topic_precision,
                 "recall": topic_recall,
                 "f1": topic_f1,
             },
             {
-                "model": "sentiment+topic modelling",
+                "model": "sentiment_and_topic_modeling",
                 "accuracy": both_accuracy,
                 "precision": both_precision,
                 "recall": both_recall,
@@ -172,3 +167,9 @@ def unsupervised_cluster():
         ]
         
     )
+
+if __name__ == "__main__":
+    nltk.download('punkt')
+    nltk.download('stopwords')
+    nltk.download('vader_lexicon')
+    unsupervised_cluster()

@@ -31,7 +31,7 @@ def semisup():
 @app.route('/unsupervised', methods=['GET'])
 def unsupervised():
     try:
-        print('Waiting')
+        return unsupervised.unsupervised_cluster()
     except:
         return "Error in training unsupervised models"
 

@@ -119,10 +119,9 @@
                     <th>Recall</th>
                     <th>F1 Score</th>
                 </tr>
-                <tr id="fastText-unsupervised" class="odd"></tr>
-                <tr id="knn-unsupervised"></tr>
-                <tr id="naive_bayes-unsupervised" class="odd"></tr>
-                <tr id="svm-unsupervised"></tr>
+                <tr id="sentiment-unsupervised" class="odd"></tr>
+                <tr id="topic_modeling-unsupervised"></tr>
+                <tr id="sentiment_and_topic_modeling-unsupervised" class="odd"></tr>
             </table>
         </div>
 
@@ -150,6 +149,7 @@
                 xhr.addEventListener("readystatechange", function() {
                     if(this.readyState === 4) {
 
+                        console.log(xhr.response);
                         var results = JSON.parse(xhr.response);
 
                         for (var i = 0; i < results.length; i++) {
