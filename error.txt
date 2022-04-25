@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "C:\Users\drumd\Documents\GitHub\cse573-stance-detection\code\unsupervised.py", line 176, in <module>
+    unsupervised_cluster()
+  File "C:\Users\drumd\Documents\GitHub\cse573-stance-detection\code\unsupervised.py", line 103, in unsupervised_cluster
+    assigned_clusters = kclusterer.cluster(X, assign_clusters=True)
+  File "C:\Users\drumd\anaconda3\envs\stance-detection\lib\site-packages\nltk\cluster\util.py", line 59, in cluster
+    self.cluster_vectorspace(vectors, trace)
+  File "C:\Users\drumd\anaconda3\envs\stance-detection\lib\site-packages\nltk\cluster\kmeans.py", line 91, in cluster_vectorspace
+    self._cluster_vectorspace(vectors, trace)
+  File "C:\Users\drumd\anaconda3\envs\stance-detection\lib\site-packages\nltk\cluster\kmeans.py", line 122, in _cluster_vectorspace
+    index = self.classify_vectorspace(vector)
+  File "C:\Users\drumd\anaconda3\envs\stance-detection\lib\site-packages\nltk\cluster\kmeans.py", line 147, in classify_vectorspace
+    dist = self._distance(vector, mean)
+  File "C:\Users\drumd\anaconda3\envs\stance-detection\lib\site-packages\nltk\cluster\util.py", line 130, in cosine_distance
+    return 1 - (numpy.dot(u, v) / (sqrt(numpy.dot(u, u)) * sqrt(numpy.dot(v, v))))
+ValueError: math domain error

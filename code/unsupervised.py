@@ -12,7 +12,6 @@ import nltk
 from nltk.cluster import KMeansClusterer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as sia
 
-
 def tokenize_truncate(sentence, tokenizer, max_input_length):  
     # sentence= re.sub(r"(@[A-Za-z0–9_]+)|[^\w\s]|#|http\S+", "", sentence)
     sentence= re.sub(r"[^\w\s]|#|http\S+", "", sentence)
