@@ -65,15 +65,16 @@ def sentiment_analyze(cleaned_text1):
 
 def unsupervised_cluster():
 
-    all_files = ['data/semeval2016_corrected_train.csv', 'data/semeval2016_corrected_test.csv']
-    li = []
+    # , 'data/semeval2016_corrected_test.csv']
+    # li = []
     
-    for filename in all_files:
-        sub_df = pd.read_csv(filename, index_col=None, header=0)
-        li.append(sub_df)
+    # for filename in all_files:
+    #     sub_df = pd.read_csv(filename, index_col=None, header=0)
+    #     li.append(sub_df)
 
-    df = pd.concat(li, axis=0, ignore_index=True)
+    # df = pd.concat(li, axis=0, ignore_index=True)
 
+    df = pd.read_csv('data/semeval2016_corrected.csv')
     # Create BERT tokenizer
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
@@ -140,33 +141,33 @@ def unsupervised_cluster():
     both_precision = precision_score(df.stance + df.topic, df.sentiment + df.cluster_name, average="weighted")
     both_recall = recall_score(df.stance + df.topic, df.sentiment + df.cluster_name, average="weighted")
 
-    # return json.dumps(
-    #     [
-    #         {
-    #             "model": "sentiment",
-    #             "accuracy": sentiment_accuracy,
-    #             "precision": sentiment_precision,
-    #             "recall": sentiment_recall,
-    #             "f1": sentiment_f1,
-    #         },
-    #         {
-    #             "model": "topic_modeling",
-    #             "accuracy": topic_accuracy,
-    #             "precision": topic_precision,
-    #             "recall": topic_recall,
-    #             "f1": topic_f1,
-    #         },
-    #         {
-    #             "model": "sentiment_and_topic_modeling",
-    #             "accuracy": both_accuracy,
-    #             "precision": both_precision,
-    #             "recall": both_recall,
-    #             "f1": both_f1,
-    #         }
-    #     ]
+    return json.dumps(
+        [
+            {
+                "model": "sentiment",
+                "accuracy": sentiment_accuracy,
+                "precision": sentiment_precision,
+                "recall": sentiment_recall,
+                "f1": sentiment_f1,
+            },
+            {
+                "model": "topic_modeling",
+                "accuracy": topic_accuracy,
+                "precision": topic_precision,
+                "recall": topic_recall,
+                "f1": topic_f1,
+            },
+            {
+                "model": "sentiment_and_topic_modeling",
+                "accuracy": both_accuracy,
+                "precision": both_precision,
+                "recall": both_recall,
+                "f1": both_f1,
+            }
+        ]
         
-    # )
-    return json.dumps("""[{"model": "sentiment", "accuracy": 0.44371997254632806, "precision": 0.45223196282651573, "recall": 0.44371997254632806, "f1": 0.41406603802107156}, {"model": "topic_modeling", "accuracy": 0.20212765957446807, "precision": 0.22022955216809206, "recall": 0.20212765957446807, "f1": 0.20466423147977636}, {"model": "sentiment_and_topic_modeling", "accuracy": 0.10638297872340426, "precision": 0.13865858135268772, "recall": 0.10638297872340426, "f1": 0.11095636130466122}]""")
+    )
+    # return json.dumps("""[{"model": "sentiment", "accuracy": 0.44371997254632806, "precision": 0.45223196282651573, "recall": 0.44371997254632806, "f1": 0.41406603802107156}, {"model": "topic_modeling", "accuracy": 0.20212765957446807, "precision": 0.22022955216809206, "recall": 0.20212765957446807, "f1": 0.20466423147977636}, {"model": "sentiment_and_topic_modeling", "accuracy": 0.10638297872340426, "precision": 0.13865858135268772, "recall": 0.10638297872340426, "f1": 0.11095636130466122}]""")
 
 if __name__ == "__main__":
     nltk.download('punkt')
