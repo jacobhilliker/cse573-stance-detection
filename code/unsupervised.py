@@ -168,7 +168,7 @@ def unsupervised_cluster():
         ]
         
     )
-def demo():
+def report_unsupervised_results():
     return json.dumps([
             json.dumps({
                 "model": "sentiment", 
