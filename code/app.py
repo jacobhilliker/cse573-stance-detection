@@ -1,14 +1,10 @@
 from pickle import GET
 from flask import Flask, render_template
-import process_data
 import supervised_models
 import semi_supervised_models
+import unsupervised
 
 app = Flask(__name__)
-
-@app.route('/hello', methods=['GET'])
-def hello_world():
-	return 'Hello World'
 
 @app.route('/', methods=['GET'])
 def index():
@@ -29,9 +25,10 @@ def semisup():
         return "Error - Unable to train models"
 
 @app.route('/unsupervised', methods=['GET'])
-def unsupervised():
+def unsupervisedAPI():
     try:
-        return unsupervised.unsupervised_cluster()
+        # return unsupervised.unsupervised_cluster()
+        return unsupervised.report_unsupervised_results()
     except:
         return "Error in training unsupervised models"
 
