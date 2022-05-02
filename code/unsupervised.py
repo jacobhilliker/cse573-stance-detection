@@ -14,10 +14,23 @@ import re
 
 import nltk
 from nltk.tokenize import RegexpTokenizer
-nltk.download('stopwords')
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
+import string
+from collections import Counter
+# import GetOldTweets3 as got
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as sia
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('vader_lexicon')
 
 # normal function example
 def my_normal_function(x):
