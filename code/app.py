@@ -27,8 +27,7 @@ def semisup():
 @app.route('/unsupervised', methods=['GET'])
 def unsupervisedAPI():
     try:
-        # return unsupervised.unsupervised_cluster()
-        return unsupervised.report_unsupervised_results()
+        return unsupervised.unsupervised_cluster()
     except:
         return "Error in training unsupervised models"
 

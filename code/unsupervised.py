@@ -1,10 +1,12 @@
 # packages to store and manipulate data
+import json
 import pandas as pd
 import numpy as np
 
 # plotting packages
 import matplotlib.pyplot as plt
-import seaborn as sns
+from sklearn.metrics import *
+# import seaborn as sns
 
 # model building package
 import sklearn
@@ -24,6 +26,8 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer as sia
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from transformers import BertTokenizer
+
 
 import nltk
 from nltk.tokenize import word_tokenize
@@ -32,11 +36,10 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('vader_lexicon')
 
-# normal function example
-def my_normal_function(x):
-    return x**2 + 10
-# lambda function example
-my_lambda_function = lambda x: x**2 + 10
+my_stopwords = nltk.corpus.stopwords.words('english')
+word_rooter = nltk.stem.snowball.PorterStemmer(ignore_stopwords=False).stem
+my_punctuation = '!"$%&\'()*+,-./:;<=>?[\\]^_`{|}~•@'
+
 
 
 def find_mentioned(tweet):
@@ -76,7 +79,7 @@ def sentiment_analysis_sent(text):
 
   # Get emotions text
   emotions = []
-  with open(e_name, 'r') as file:
+  with open('code/emotion.txt', 'r') as file:
       for line in file:
           clear_line = line.replace('\n', '').replace(',', '').replace("'", '').strip()
           word, emotion = clear_line.split(':')
@@ -149,7 +152,7 @@ def unsupervised_cluster():
 
     # df = pd.concat(li, axis=0, ignore_index=True)
 
-    df = pd.read_csv('data/semeval2016_corrected.csv')
+    df = pd.read_csv('data/semeval_train.csv')
     # Create BERT tokenizer
     # create dataframe where each use of hashtag gets its own row
      
@@ -271,7 +274,8 @@ def unsupervised_cluster():
 
     topic_dict = {}
     for i in range(NUM_CLUSTERS):
-    topic_dict.update({i: df_topics[i]})
+        topic_dict.update({i: df_topics[i]})
+        
     topic_df = pd.DataFrame.from_dict(topic_dict, orient='index')
 
     topic_df.columns = ["cluster_name"]
@@ -298,20 +302,20 @@ def unsupervised_cluster():
     df = df.replace({'Stance': 'NONE'}, 'other')
 
 
-    sentiment_f1 = f1_score(df.Stance, df.sentiment, average="weighted")
-    sentiment_accuracy = accuracy_score(df.Stance, df.sentiment)
-    sentiment_precision = precision_score(df.Stance, df.sentiment, average="weighted")
-    sentiment_recall = recall_score(df.Stance, df.sentiment, average="weighted")
+    sentiment_f1 = f1_score(df.Stance, df.Sentiment, average="weighted")
+    sentiment_accuracy = accuracy_score(df.Stance, df.Sentiment)
+    sentiment_precision = precision_score(df.Stance, df.Sentiment, average="weighted")
+    sentiment_recall = recall_score(df.Stance, df.Sentiment, average="weighted")
     
-    topic_f1 = f1_score(df.Target, df.cluster_name, average="weighted")
-    topic_accuracy = accuracy_score(df.Target, df.cluster_name)
-    topic_precision = precision_score(df.Target, df.cluster_name, average="weighted")
-    topic_recall = recall_score(df.Target, df.cluster_name, average="weighted")
+    topic_f1 = f1_score(df.Target, df.Target_l, average="weighted")
+    topic_accuracy = accuracy_score(df.Target, df.Target_l)
+    topic_precision = precision_score(df.Target, df.Target_l, average="weighted")
+    topic_recall = recall_score(df.Target, df.Target_l, average="weighted")
 
-    both_f1 = f1_score(df.stance + df.Target, df.sentiment + df.cluster_name, average="weighted")
-    both_accuracy = accuracy_score(df.stance + df.Target, df.sentiment + df.cluster_name)
-    both_precision = precision_score(df.stance + df.Target, df.sentiment + df.cluster_name, average="weighted")
-    both_recall = recall_score(df.stance + df.Target, df.sentiment + df.cluster_name, average="weighted")
+    both_f1 = f1_score(df.Stance + df.Target, df.Sentiment + df.Target_l, average="weighted")
+    both_accuracy = accuracy_score(df.Stance + df.Target, df.Sentiment + df.Target_l)
+    both_precision = precision_score(df.Stance + df.Target, df.Sentiment + df.Target_l, average="weighted")
+    both_recall = recall_score(df.Stance + df.Target, df.Sentiment + df.Target_l, average="weighted")
 
     return json.dumps(
         [
@@ -339,30 +343,31 @@ def unsupervised_cluster():
         ]
         
     )
-def report_unsupervised_results():
-    return json.dumps([
-            json.dumps({
-                "model": "sentiment", 
-                "accuracy": 0.44371997254632806, 
-                "precision": 0.45223196282651573, 
-                "recall": 0.44371997254632806,
-                 "f1": 0.41406603802107156}),
-            json.dumps({
-                "model": "topic_modeling", 
-                "accuracy": 0.20212765957446807, 
-                "precision": 0.22022955216809206, 
-                "recall": 0.20212765957446807, 
-                "f1": 0.20466423147977636}), 
-            json.dumps({
-                "model": "sentiment_and_topic_modeling", 
-                "accuracy": 0.10638297872340426,
-                "precision": 0.13865858135268772, 
-                "recall": 0.10638297872340426, 
-                "f1": 0.11095636130466122})
-            ])
+# def report_unsupervised_results():
+#     return json.dumps([
+#             json.dumps({
+#                 "model": "sentiment", 
+#                 "accuracy": 0.44371997254632806, 
+#                 "precision": 0.45223196282651573, 
+#                 "recall": 0.44371997254632806,
+#                  "f1": 0.41406603802107156}),
+#             json.dumps({
+#                 "model": "topic_modeling", 
+#                 "accuracy": 0.20212765957446807, 
+#                 "precision": 0.22022955216809206, 
+#                 "recall": 0.20212765957446807, 
+#                 "f1": 0.20466423147977636}), 
+#             json.dumps({
+#                 "model": "sentiment_and_topic_modeling", 
+#                 "accuracy": 0.10638297872340426,
+#                 "precision": 0.13865858135268772, 
+#                 "recall": 0.10638297872340426, 
+#                 "f1": 0.11095636130466122})
+#             ])
 
 if __name__ == "__main__":
     nltk.download('punkt')
     nltk.download('stopwords')
     nltk.download('vader_lexicon')
-    unsupervised_cluster()
+    a = unsupervised_cluster()
+    print(a)
