@@ -32,14 +32,7 @@ def find_mentioned(tweet):
 
 def find_hashtags(tweet):
     '''This function will extract hashtags'''
-    return re.findall('(#[A-Za-z]+[A-Za-z0-9-_]+)', tweet)   
-df['mentioned'] = df.Tweet.apply(find_mentioned)
-df['hashtags'] = df.Tweet.apply(find_hashtags)
-# take the rows from the hashtag columns where there are actually hashtags
-hashtags_list_df = df.loc[
-                       df.hashtags.apply(
-                           lambda hashtags_list: hashtags_list !=[]
-                       ),['hashtags']]
+    return re.findall('(#[A-Za-z]+[A-Za-z0-9-_]+)', tweet)  
 
 def tokenize_truncate(sentence, tokenizer, max_input_length):  
     # sentence= re.sub(r"(@[A-Za-z0–9_]+)|[^\w\s]|#|http\S+", "", sentence)
@@ -146,6 +139,15 @@ def unsupervised_cluster():
     df = pd.read_csv('data/semeval2016_corrected.csv')
     # Create BERT tokenizer
     # create dataframe where each use of hashtag gets its own row
+     
+    df['mentioned'] = df.Tweet.apply(find_mentioned)
+    df['hashtags'] = df.Tweet.apply(find_hashtags)
+    # take the rows from the hashtag columns where there are actually hashtags
+    hashtags_list_df = df.loc[
+                        df.hashtags.apply(
+                            lambda hashtags_list: hashtags_list !=[]
+                        ),['hashtags']]
+                        
     flattened_hashtags_df = pd.DataFrame(
         [hashtag for hashtags_list in hashtags_list_df.hashtags
         for hashtag in hashtags_list],
